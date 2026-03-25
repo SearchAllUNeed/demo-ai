@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>AI System Prototype</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-gray-100 min-h-screen flex items-center justify-center">
+
+<div class="bg-white shadow-xl rounded-2xl p-8 w-full max-w-2xl">
+  <h1 class="text-3xl font-bold mb-2">AI System Prototype</h1>
+  <p class="text-gray-600 mb-6">
+    Interactive interface preview.
+    Intelligence layer will be connected in the next phase.
+  </p>
+
+  <textarea id="input"
+    class="w-full p-4 border rounded-xl focus:outline-none focus:ring"
+    rows="5"
+    placeholder="Enter your input here..."></textarea>
+
+  <button onclick="send()"
+    class="mt-4 w-full bg-black text-white py-3 rounded-xl hover:bg-gray-800 transition">
+    Run Prototype
+  </button>
+
+  <div id="loader" class="hidden mt-4 text-gray-500">
+    Processing input...
+  </div>
+
+  <pre id="output"
+    class="mt-4 bg-gray-50 p-4 rounded-xl whitespace-pre-wrap"></pre>
+</div>
+
+<script>
+async function send() {
+  const input = document.getElementById("input").value;
+  const output = document.getElementById("output");
+  const loader = document.getElementById("loader");
+
+  output.innerText = "";
+  loader.classList.remove("hidden");
+
+  // Artificial delay to simulate processing
+  await new Promise(r => setTimeout(r, 1200));
+
+  const response = await fetch("/predict", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ text: input })
+  });
+
+  const data = await response.json();
+  loader.classList.add("hidden");
+  output.innerText = data.result;
+}
+</script>
+
+</body>
+</html>
